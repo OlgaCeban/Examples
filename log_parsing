@@ -1,0 +1,14 @@
+import sys, re
+from collections import Counter
+data = sys.stdin.readlines()
+dataStr= str(data)
+dataStr = dataStr.replace('\\n', '')
+dataStr = dataStr.replace('\'', '')
+pattern = re.compile("\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] ")
+dataStr = re.sub(pattern,'', dataStr)
+dataStr = re.sub('[\ [\]]','', dataStr)
+dataStr = dataStr.split(',')      
+cnt = dict(Counter(dataStr))
+sd = sorted(cnt.values())
+for k in reversed(sd):
+    print(list(cnt.keys())[list(cnt.values()).index(k)])
