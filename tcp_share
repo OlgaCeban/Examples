@@ -1,0 +1,33 @@
+"""
+Задача KDD99 (http://kdd.ics.uci.edu/databases/kddcup99/kddcup99.html) 
+посвящена системам обнаружения сетевых вторжений. 
+Используя сокращенный набор входных данных (kddcup.data_10_percent.gz), 
+найди ответ на следующий вопрос:
+
+Какова доля соединений, которые используют протокол TCP (2-й столбец)?
+"""
+
+import pandas as pd
+tmp = pd.read_csv('~/kddcup.data_10_percent_corrected.csv')
+tcpConnections = tmp.tcp.value_counts()['tcp']
+allConnections = tmp.shape[0]
+tcpShare = tcpConnections/allConnections
+print("Доля соединений, которые используют протокол TCP = {:.4f}".format(tcpShare))
+
+"""
+Предполагая, что сетевые соединения, которые используют TCP-протокол,
+распределены по схеме Бернулли, оцени нижнюю границу ассиметричного 
+доверительного интервала для оценки вероятности установления TCP-соединения
+с вероятностью ошибки 0.02.
+"""
+
+
+q = 1 - tcpShare
+
+# Формула расчёта представлена на странице по ссылке ниже
+# http://www.mathprofi.ru/ocenka_veroyatnosti_binomialnogo_raspredeleniya.html
+
+lower_border = tcpShare - 2.34 * sqrt((tcpShare*q)/allConnections)
+
+print("Нижняя граница доверительного интервала для оценки вероятности установления TCP-соединения 
+с вероятностью ошибки 0.02 = {:.4f}".format(lower_border))
